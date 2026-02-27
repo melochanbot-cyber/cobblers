@@ -56,9 +56,19 @@
               <option value="3">3</option>
             </select>
           </div>
-          <div class="config-item models">
-            <label for="models">Models (comma-separated)</label>
-            <input type="text" id="models" value="google/gemini-2.0-flash-001,stepfun/step-2-16k-nothink,meta-llama/llama-3.3-70b-instruct">
+          <div class="config-item models-config">
+            <label>Models (select up to 5)</label>
+            <div class="model-selector">
+              <select id="model-select" multiple size="5">
+                <option value="loading" disabled>Loading models...</option>
+              </select>
+              <div class="model-actions">
+                <button type="button" id="show-free" class="btn-small">Free only</button>
+                <button type="button" id="show-cheap" class="btn-small">Under $1/M</button>
+                <button type="button" id="show-all" class="btn-small">All</button>
+              </div>
+            </div>
+            <input type="hidden" id="models" value="google/gemini-2.0-flash-001,stepfun/step-2-16k-nothink,meta-llama/llama-3.3-70b-instruct">
           </div>
         </div>
 

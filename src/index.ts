@@ -3,7 +3,7 @@
 import { Command } from "commander";
 import { readFileSync } from "fs";
 import { Council, formatResult } from "./council.js";
-import { DEFAULT_MODELS } from "./openrouter.js";
+import { DEFAULT_MODELS, fetchModels, formatModelInfo } from "./openrouter.js";
 import { createServer } from "./server.js";
 
 const program = new Command();
@@ -139,6 +139,40 @@ program
   .option("-p, --port <number>", "Port to listen on", "3000")
   .action((options) => {
     createServer(parseInt(options.port));
+  });
+
+program
+  .command("models")
+  .description("List available models from OpenRouter")
+  .option("-f, --free", "Show only free models")
+  .option("-c, --max-cost <number>", "Maximum cost per 1M tokens")
+  .option("-n, --limit <number>", "Number of models to show", "20")
+  .action(async (options) => {
+    try {
+      console.log("\n🔍 Fetching models from OpenRouter...\n");
+      
+      const models = await fetchModels({
+        free: options.free,
+        maxCost: options.maxCost ? parseFloat(options.maxCost) : undefined,
+        limit: parseInt(options.limit)
+      });
+      
+      if (models.length === 0) {
+        console.log("No models found matching criteria.");
+        return;
+      }
+      
+      console.log(`Found ${models.length} models (sorted by cost):\n`);
+      
+      for (const model of models) {
+        console.log(`  ${formatModelInfo(model)}`);
+      }
+      
+      console.log("\n💡 Use with: cobblers ask '...' --models model1,model2,model3\n");
+    } catch (error) {
+      console.error("\x1b[31mError:\x1b[0m", error instanceof Error ? error.message : error);
+      process.exit(1);
+    }
   });
 
 program.parse();

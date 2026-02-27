@@ -8,9 +8,68 @@ const clearBtn = document.getElementById('clear');
 const outputSection = document.getElementById('output');
 const deliberationContent = document.getElementById('deliberation-content');
 const addOptionBtn = document.getElementById('add-option');
+const modelSelect = document.getElementById('model-select');
+const modelsInput = document.getElementById('models');
 
 let currentMode = 'ask';
 let optionCount = 2;
+let allModels = [];
+let defaultModels = [];
+
+// Fetch models on load
+async function loadModels(filter = {}) {
+  try {
+    const params = new URLSearchParams();
+    if (filter.free) params.set('free', 'true');
+    if (filter.maxCost) params.set('maxCost', filter.maxCost);
+    params.set('limit', '50');
+    
+    const response = await fetch(`/api/models?${params}`);
+    const data = await response.json();
+    allModels = data.models;
+    defaultModels = data.defaults;
+    renderModelOptions();
+  } catch (error) {
+    console.error('Failed to load models:', error);
+    modelSelect.innerHTML = '<option disabled>Failed to load models</option>';
+  }
+}
+
+function renderModelOptions() {
+  modelSelect.innerHTML = '';
+  
+  for (const model of allModels) {
+    const cost = model.pricing.prompt === 0 && model.pricing.completion === 0
+      ? 'FREE'
+      : `$${((model.pricing.prompt + model.pricing.completion) / 2).toFixed(2)}/1M`;
+    const ctx = model.context_length >= 1000000 
+      ? `${(model.context_length / 1000000).toFixed(1)}M`
+      : `${Math.round(model.context_length / 1000)}k`;
+    
+    const option = document.createElement('option');
+    option.value = model.id;
+    option.textContent = `${model.id} (${cost}, ${ctx})`;
+    option.selected = defaultModels.includes(model.id);
+    modelSelect.appendChild(option);
+  }
+  
+  updateModelsInput();
+}
+
+function updateModelsInput() {
+  const selected = Array.from(modelSelect.selectedOptions).map(o => o.value);
+  modelsInput.value = selected.length > 0 ? selected.join(',') : defaultModels.join(',');
+}
+
+// Model filter buttons
+document.getElementById('show-free')?.addEventListener('click', () => loadModels({ free: true }));
+document.getElementById('show-cheap')?.addEventListener('click', () => loadModels({ maxCost: '1' }));
+document.getElementById('show-all')?.addEventListener('click', () => loadModels());
+
+modelSelect?.addEventListener('change', updateModelsInput);
+
+// Load models on start
+loadModels();
 
 // Tab switching
 tabs.forEach(tab => {

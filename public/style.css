@@ -145,9 +145,54 @@ textarea:focus, input:focus, select:focus {
   gap: 0.25rem;
 }
 
-.config-item.models {
+.config-item.models-config {
   flex: 1;
-  min-width: 200px;
+  min-width: 300px;
+}
+
+.model-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#model-select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+#model-select option {
+  padding: 0.25rem;
+}
+
+#model-select option:checked {
+  background: var(--primary);
+  color: white;
+}
+
+.model-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  border: 1px solid var(--border);
+  background: var(--surface-hover);
+  color: var(--text-dim);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-small:hover {
+  background: var(--border);
+  color: var(--text);
 }
 
 .config-item label {

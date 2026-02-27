@@ -2,7 +2,7 @@ import express from "express";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { Council, CouncilConfig } from "./council.js";
-import { DEFAULT_MODELS } from "./openrouter.js";
+import { DEFAULT_MODELS, fetchModels } from "./openrouter.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -16,6 +16,21 @@ export function createServer(port = 3000) {
   // Health check
   app.get("/api/health", (_req, res) => {
     res.json({ status: "ok", models: DEFAULT_MODELS });
+  });
+
+  // List available models
+  app.get("/api/models", async (req, res) => {
+    try {
+      const free = req.query.free === "true";
+      const maxCost = req.query.maxCost ? parseFloat(req.query.maxCost as string) : undefined;
+      const limit = req.query.limit ? parseInt(req.query.limit as string) : 50;
+      
+      const models = await fetchModels({ free, maxCost, limit });
+      res.json({ models, defaults: DEFAULT_MODELS });
+    } catch (error) {
+      console.error("Models fetch error:", error);
+      res.status(500).json({ error: String(error) });
+    }
   });
 
   // Deliberation endpoint (non-streaming)
