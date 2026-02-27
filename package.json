@@ -1,0 +1,39 @@
+{
+  "name": "cobblers",
+  "version": "0.1.0",
+  "description": "Multi-agent deliberation CLI - let AI personas debate and synthesize",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "cobblers": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "ai",
+    "llm",
+    "multi-agent",
+    "deliberation",
+    "debate",
+    "reasoning",
+    "openrouter"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.0.0",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

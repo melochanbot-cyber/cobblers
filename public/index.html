@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cobblers - Multi-Agent Deliberation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🪑 Cobblers</h1>
+      <p class="subtitle">Multi-agent deliberation — let AI personas debate and synthesize</p>
+    </header>
+
+    <main>
+      <section class="input-section">
+        <div class="mode-tabs">
+          <button class="tab active" data-mode="ask">Ask</button>
+          <button class="tab" data-mode="review">Review</button>
+          <button class="tab" data-mode="decide">Decide</button>
+        </div>
+
+        <div class="input-area" id="ask-input">
+          <textarea id="question" placeholder="Enter your question for the council to deliberate..."></textarea>
+        </div>
+
+        <div class="input-area hidden" id="review-input">
+          <input type="text" id="file-path" placeholder="File path (optional)">
+          <textarea id="code-content" placeholder="Paste code to review..."></textarea>
+        </div>
+
+        <div class="input-area hidden" id="decide-input">
+          <div id="options-container">
+            <input type="text" class="option-input" placeholder="Option A">
+            <input type="text" class="option-input" placeholder="Option B">
+          </div>
+          <button id="add-option" class="btn-secondary">+ Add Option</button>
+        </div>
+
+        <div class="config">
+          <div class="config-item">
+            <label for="agents">Agents</label>
+            <select id="agents">
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="config-item">
+            <label for="rounds">Rounds</label>
+            <select id="rounds">
+              <option value="1">1</option>
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+          <div class="config-item models">
+            <label for="models">Models (comma-separated)</label>
+            <input type="text" id="models" value="google/gemini-2.0-flash-001,stepfun/step-2-16k-nothink,meta-llama/llama-3.3-70b-instruct">
+          </div>
+        </div>
+
+        <button id="deliberate" class="btn-primary">🪑 Convene Council</button>
+      </section>
+
+      <section class="output-section hidden" id="output">
+        <div class="output-header">
+          <h2>Deliberation</h2>
+          <button id="clear" class="btn-secondary">Clear</button>
+        </div>
+        <div id="deliberation-content"></div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Powered by <a href="https://openrouter.ai" target="_blank">OpenRouter</a> • <a href="https://github.com/Raylinkh/cobblers" target="_blank">GitHub</a></p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
